@@ -1,5 +1,6 @@
 package ee.bcs.valiit.tasks;
 
+import liquibase.pro.packaged.A;
 import liquibase.pro.packaged.B;
 
 import java.math.BigDecimal;
@@ -35,7 +36,6 @@ public class Lesson4 {
                 } else {
                     System.out.println(viga);
                 }
-
 
             }else if (line.equalsIgnoreCase( "3")){
                 System.out.println(sis);

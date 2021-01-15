@@ -1,14 +1,15 @@
 package ee.bcs.valiit.tasks;
 
+import org.hibernate.tool.schema.extract.internal.SequenceInformationExtractorHSQLDBDatabaseImpl;
+
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Cipher {
 
         public static void main(String[] args) {
 
-
-            System.out.println(encode("...transit gloria mundi[]"));
-            System.out.println(decode(".ril.ian ag[]dtsuimotr n."));
+            System.out.println(encode("1234567890123456789012345678901234567890123456789"));
 
         }
         //    lisaülesanne Interlaced Spiral Cipher codewars - https://www.codewars.com/kata/5a24a35a837545ab04001614/train/java
@@ -17,6 +18,15 @@ public class Cipher {
         public static String encode(String s) {
 
             double pikkus = s.length();
+            if (Math.sqrt(pikkus) % 1 != 0) {
+                while (Math.sqrt(pikkus) % 1 !=0){
+                    pikkus++;
+                }
+                double vahe = pikkus - s.length();
+                for (int i = 0; i<vahe; i++){
+                    s+=" ";
+                }
+            }
             int sqrtS = (int)Math.ceil(Math.sqrt(pikkus));
             String[][] tabel = new String[sqrtS][sqrtS];
             if (sqrtS >1){
@@ -71,7 +81,11 @@ public class Cipher {
                 tabel[k+t][j+t] = s.substring(count,count+1);
                 count++;
                 if(count+1 ==pikkus){
-                    k = kulg;
+                    if (count ==8){
+                        k = 1;
+                    } else {
+                        k = kulg+1;
+                    }
                     j = k;
                     tabel[k][j] = s.substring(count,count+1);
                     count++;
@@ -87,6 +101,16 @@ public class Cipher {
             String message = "";
             String returnMessage = "";
             double pikkus = s.length();
+            if (Math.sqrt(pikkus) % 1 != 0) {
+                while (Math.sqrt(pikkus) % 1 !=0){
+                    pikkus++;
+                }
+                double vahe = pikkus - s.length();
+                for (int i = 0; i<vahe; i++){
+                    s+=" ";
+                }
+            }
+
             int sqrtS = (int)Math.ceil(Math.sqrt(pikkus));
             if (sqrtS >1) {
                 String[][] coded = new String[sqrtS][sqrtS];
@@ -135,7 +159,11 @@ public class Cipher {
                 returnMessage+=tabel[k+t][j+t];
                 count++;
                 if(count+1 ==pikkus){
-                    k = kulg;
+                    if (kulg ==2){
+                        k = 1;
+                    } else {
+                        k = kulg;
+                    }
                     j = k;
                     returnMessage+=tabel[k][j];
                     count++;
