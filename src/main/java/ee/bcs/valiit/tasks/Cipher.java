@@ -1,6 +1,5 @@
 package ee.bcs.valiit.tasks;
 
-import org.hibernate.tool.schema.extract.internal.SequenceInformationExtractorHSQLDBDatabaseImpl;
 
 import java.math.BigDecimal;
 import java.util.*;
