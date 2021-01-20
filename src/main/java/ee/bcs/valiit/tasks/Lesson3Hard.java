@@ -1,12 +1,14 @@
 package ee.bcs.valiit.tasks;
 
-import javax.persistence.criteria.CriteriaBuilder;
+
 import java.util.*;
 
 public class Lesson3Hard {
 
     public static void main(String[] args) {
-        System.out.println(buddyPairs(218897,225423));
+
+//       System.out.println(findAndPrintDivisors(7775460));
+
     }
 
     public static int evenFibonacci(int n) {
@@ -58,6 +60,8 @@ public class Lesson3Hard {
         System.out.println("Õige vastus oli " + i + " ja sul läks " + count + " katset");
 
     }
+
+
 
     public static String morseCode(String text) {
         // TODO kirjuta programm, mis tagastab sisestatud teksti morse koodis (https://en.wikipedia.org/wiki/Morse_code)
@@ -123,31 +127,34 @@ public class Lesson3Hard {
 //    lisaülesanne codewars https://www.codewars.com/kata/554ca54ffa7d91b236000023
 
     public static int[] deleteNth(int[] list, int n) {
-        Integer[] list2 = Arrays.stream(list).boxed().toArray(Integer[]::new);
-        List<Integer> arrayList = new ArrayList<>(Arrays.asList(list2));
-        int count;
-        for (int i = 0; i < arrayList.size(); i++) {
-            Integer x = arrayList.get(i);
-            count = 1;
-            int j = i + 1;
-            while (j < arrayList.size()) {
-                Integer y = arrayList.get(j);
-                if (x.equals(y)) {
-                    count++;
-                    if (count > n) {
-                        arrayList.remove(j);
+        if ( n== 0 ){
+            return new int[0];
+        } else {
+            Integer[] list2 = Arrays.stream(list).boxed().toArray(Integer[]::new);
+            List<Integer> arrayList = new ArrayList<>(Arrays.asList(list2));
+            int count;
+            for (int i = 0; i < arrayList.size(); i++) {
+                Integer x = arrayList.get(i);
+                count = 1;
+                int j = i + 1;
+                while (j < arrayList.size()) {
+                    Integer y = arrayList.get(j);
+                    if (x.equals(y)) {
+                        count++;
+                        if (count > n) {
+                            arrayList.remove(j);
+                        } else {
+                            j++;
+                        }
                     } else {
                         j++;
                     }
-                } else {
-                    j++;
                 }
-            }
 
+            }
+            int[] array = arrayList.stream().mapToInt(i -> i).toArray();
+            return array;
         }
-        System.out.println(arrayList.toString());
-        int[] array = arrayList.stream().mapToInt(i -> i).toArray();
-        return array;
     }
 
 
@@ -160,7 +167,7 @@ public class Lesson3Hard {
             long sum2 = sum1 - 1;
             long sum3;
             sum3 = findAndPrintDivisors(sum2);
-            if ((sum3 - 1) == x) {
+            if ((sum3 - 1) == x && (sum3-1)<sum2) {
                 return "(" + (sum3 - 1) + " " + sum2 + ")";
             }
         }
@@ -183,17 +190,11 @@ public class Lesson3Hard {
     public static long findAndPrintDivisors(long n){
         long maxD = (long)Math.sqrt(n);
         long sum=0;
-        for (int i=1; i<=maxD; i++)
-        {
-            if (n%i==0)
-            {
-                // If divisors are equal, print only one
-                if (n/i == i)
-                    sum+=i;
-
-                    // Otherwise print both
-                else
-                {
+        for (int i=0; i<=maxD; i++){
+            if (n%i==0) {
+                if (n/i == i) {
+                    sum += i;
+                } else {
                     sum+=i;
                     sum = sum+(n/i);
                 }
@@ -203,5 +204,173 @@ public class Lesson3Hard {
         sum-=n;
         return sum;
     }
+
+//    lisaülesanne camelCase codewars
+
+    public static String toCamelCase(String s){
+        String[] i = s.replace("_","-").split("-");
+        int len = i.length;
+        String loplik = "";
+        loplik+=(i[0]);
+        for (int j = 1; j<len; j++ ){
+            loplik+=(i[j].substring(0,1).toUpperCase() + i[j].substring(1).toLowerCase());
+        }
+        return loplik;
+
+    }
+
+    //    lisaülesanne camelCase codewars - lahendamata
+
+    public static String toJadenCase(String phrase){
+        String[] i = phrase.split(" ");
+        int len = i.length;
+        String loplik = "";
+        for (int j = 0; j<len; j++ ){
+            loplik+=(i[j].substring(0,1).toUpperCase() + i[j].substring(1).toLowerCase() + " ");
+        }
+        return loplik;
+
+    }
+
+    //    lisaülesanne Interlaced Spiral Cipher codewars - https://www.codewars.com/kata/5a24a35a837545ab04001614/train/java
+
+
+        public static String encode(String s) {
+
+            double pikkus = s.length();
+            int sqrtS = (int)Math.ceil(Math.sqrt(pikkus));
+            String[][] tabel = new String[sqrtS][sqrtS];
+            if (sqrtS >1){
+                int count = 0;
+                int tsCount = 0;
+                int siseTsuklid = 0;
+                if(sqrtS%2==0){
+                    siseTsuklid = (sqrtS+1)/2;
+                } else {
+                    siseTsuklid = sqrtS/2;
+                }
+
+
+                for ( int i = 0; i< siseTsuklid; i++){
+                    cipher(tabel, i, sqrtS, count, s);
+                    count += (sqrtS)*4-4;
+                    sqrtS-=2;
+                }
+            }
+            String decoded = "";
+            for (int i = 0; i< tabel.length; i++){
+                for (int j= 0; j< tabel.length; j++){
+                    if (tabel[i][j]==null){
+                        decoded += " ";
+                    } else {
+                        decoded += tabel[i][j];
+                    }
+                }
+            }
+            return decoded;
+        }
+
+
+        public static String [][] cipher( String[][] tabel, int t, int kuljePikkus, int count, String s){
+            for ( int i = 0; i< kuljePikkus-1; i++){
+                int pikkus = s.length();
+                int kulg = kuljePikkus-1;
+                int k = 0;
+                int j = i;
+                tabel[k+t][j+t] = s.substring(count,count+1);
+                count++;
+                j=kulg;
+                k+=i;
+                tabel[k+t][j+t] = s.substring(count,count+1);
+                count++;
+                j-=i;
+                k=kulg;
+                tabel[k+t][j+t] = s.substring(count,count+1);
+                count++;
+                j=0;
+                k=(kulg-i);
+                tabel[k+t][j+t] = s.substring(count,count+1);
+                count++;
+                if(count+1 ==pikkus){
+                    k = kulg;
+                    j = k;
+                    tabel[k][j] = s.substring(count,count+1);
+                    count++;
+                }
+                if (count==pikkus){
+                    break;
+                }
+            }
+            return tabel;
+        }
+
+        public static String decode(String s) {
+            String message = "";
+            String returnMessage = "";
+            double pikkus = s.length();
+            int sqrtS = (int)Math.ceil(Math.sqrt(pikkus));
+            if (sqrtS >1) {
+                String[][] coded = new String[sqrtS][sqrtS];
+                int x=0;
+                for (int i = 0; i< sqrtS; i++){
+                    for (int j= 0; j< sqrtS; j++){
+                        coded [i][j]= s.substring(x,x+1);
+                        x++;
+                    }
+                }
+                int count = 0;
+                int tsCount = 0;
+                int siseTsuklid = 0;
+                if (sqrtS % 2 == 0) {
+                    siseTsuklid = (sqrtS + 1) / 2;
+                } else {
+                    siseTsuklid = sqrtS / 2;
+                }
+                for ( int i = 0; i< siseTsuklid; i++){
+                    returnMessage+=deCipher(coded, i, sqrtS, count, pikkus, message);
+                    count += (sqrtS)*4-4;
+                    sqrtS-=2;
+                }
+            }
+        return returnMessage;
+        }
+
+    public static String deCipher( String[][] tabel, int t, int kuljePikkus, int count, double pikkus, String message){
+        String returnMessage = message;
+        for ( int i = 0; i< kuljePikkus-1; i++){
+            int kulg = kuljePikkus-1;
+            int k = 0;
+            int j = i;
+            returnMessage+=tabel[k+t][j+t];
+            count++;
+            j=kulg;
+            k+=i;
+            returnMessage+=tabel[k+t][j+t];
+            count++;
+            j-=i;
+            k=kulg;
+            returnMessage+=tabel[k+t][j+t];
+            count++;
+            j=0;
+            k=(kulg-i);
+            returnMessage+=tabel[k+t][j+t];
+            count++;
+            if(count+1 ==pikkus){
+                k = kulg;
+                j = k;
+                returnMessage+=tabel[k][j];
+                count++;
+            }
+            if (count==pikkus){
+                break;
+            }
+        }
+        return returnMessage;
+    }
+
+
+
+
+//        public static
 
 }

@@ -1,6 +1,5 @@
 package ee.bcs.valiit.tasks;
 
-import liquibase.pro.packaged.S;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +27,13 @@ public class Lesson2 {
             System.out.println(täisarvud[i-1]);
         }
 
+    }
+    public static int[] exercise1Web(int[] täisarvud) {
+        int[] result = new int[täisarvud.length];
+        for (int i=täisarvud.length-1; i>0; i--){
+            result[täisarvud.length-1-i] = täisarvud[i];
+        }
+        return result;
     }
 
     // TODO prindi välja x esimest paaris arvu

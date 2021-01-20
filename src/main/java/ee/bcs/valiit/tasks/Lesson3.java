@@ -15,7 +15,7 @@ public class Lesson3 {
         // Todo liida kokku kõik numbrid massivis x
         int summa = 0;
         for (int i : x) {
-            summa += x[i];
+            summa += i;
         }
         return summa;
     }

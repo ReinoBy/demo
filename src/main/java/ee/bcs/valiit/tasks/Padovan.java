@@ -9,7 +9,7 @@ public class Padovan {
 
     public static void main(String[] args) {
 
-        System.out.println(Get(100));
+//        System.out.println(Get(100));
 
     }
 

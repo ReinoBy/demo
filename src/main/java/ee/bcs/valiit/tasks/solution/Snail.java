@@ -10,6 +10,7 @@ public class Snail {
     public static int[] snail(int[][] array) {
 
         int size = array.length -1;
+        int[] snail = new int[array.length* array.length];
         for (int i = 0; i<size;i++){
 
         }

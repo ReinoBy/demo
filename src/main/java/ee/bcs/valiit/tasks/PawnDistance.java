@@ -5,7 +5,7 @@ public class PawnDistance {
     private long distance;
 
     public static void main(String[] args) {
-        System.out.println(redKnight(0, 7));
+//        System.out.println(redKnight(0, 7));
     }
 
     public PawnDistance(String s, long d) {
