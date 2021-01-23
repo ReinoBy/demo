@@ -7,36 +7,23 @@ import java.util.Map;
 
 public class Padovan {
 
-    public static void main(String[] args) {
-
-//        System.out.println(Get(100));
-
-    }
-
     public static BigInteger Get (long power) {
         power = (int)power+1;
+
         BigInteger[] padovan = new BigInteger[(int)power];
 
         String binary = Integer.toBinaryString((int)power);
         int binLength = binary.length();
 
-        BigInteger[][] mainMatrix = {{new BigInteger("0"), new BigInteger("0"), new BigInteger("0")},
-                {new BigInteger("0"), new BigInteger("0"), new BigInteger("0")},
-                {new BigInteger("0"), new BigInteger("0"), new BigInteger("0")}};
+        BigInteger[][] mainMatrix = new BigInteger[3][3];
 
         int count = 0;
 
         for (int x = binLength; x > 0; x--) {
             if (binary.substring(x - 1, x).equalsIgnoreCase("1")) {
 
-                BigInteger[][] matrix = {{new BigInteger("0"), new BigInteger("1"), new BigInteger("0")},
-                        {new BigInteger("0"), new BigInteger("0"), new BigInteger("1")},
-                        {new BigInteger("1"), new BigInteger("1"), new BigInteger("0")}};
-
-                BigInteger[][] c = {{new BigInteger("0"), new BigInteger("0"), new BigInteger("0")},
-                        {new BigInteger("0"), new BigInteger("0"), new BigInteger("0")},
-                        {new BigInteger("0"), new BigInteger("0"), new BigInteger("0")}};
-
+                BigInteger[][] matrix = new BigInteger[3][3];
+                BigInteger[][] c = new BigInteger[3][3];
 
                 for (int x2 = 0; x2 < binLength-x; x2++) {
                     matrixCreator(c, matrix, matrix);
@@ -82,11 +69,10 @@ public class Padovan {
                     BigInteger num3 = b[k][j];
                     BigInteger num4 = (num2.multiply(num3));
                     c[i][j] = num.add(num4);
-                }//end of k loop
-            }//end of j loop
+                }
+            }
         }
 
         return c;
-
     }
 }
