@@ -8,6 +8,7 @@ import java.util.Map;
 public class Padovan {
 
     public static BigInteger Get (long power) {
+
         power = (int)power+1;
 
         BigInteger[] padovan = new BigInteger[(int)power];
