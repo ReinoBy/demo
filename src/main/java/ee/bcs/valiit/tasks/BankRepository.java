@@ -94,7 +94,6 @@ public class BankRepository {
         return customerList;
     }
 
-
     public Customer findAccounts(Customer customer){
         String sqlS2 = "SELECT * FROM accounts WHERE owner_id = :muutujaS2 ";
         Map<String, Object> paramMapS2 = new HashMap<>();

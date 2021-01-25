@@ -2,13 +2,25 @@ package ee.bcs.valiit.tasks;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Account {
 
-    private String customerName;
     private String accountNr;
     private BigDecimal saldo;
+    private int ownerId;
+    private List<Transaction> transactions;
+
+
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
 
     public String getAccountNr() {
         return accountNr;
@@ -18,23 +30,6 @@ public class Account {
         this.accountNr = accountNr;
     }
 
-    private BigDecimal transaction;
-
-    public BigDecimal getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(BigDecimal transaction) {
-        this.transaction = transaction;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
 
 
     public BigDecimal getSaldo() {
@@ -45,4 +40,11 @@ public class Account {
         this.saldo = saldo;
     }
 
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
 }

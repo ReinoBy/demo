@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Random;
 
 @RestController
-public class SolutionMathUtilController {
+class MathUtilController {
 
     @GetMapping("min/{a}/{b}")
     public int min(@PathVariable("a") int aVariable, @PathVariable("b") int bVariable){
