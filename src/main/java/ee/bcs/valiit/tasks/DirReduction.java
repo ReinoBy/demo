@@ -3,6 +3,8 @@ package ee.bcs.valiit.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
+// https://www.codewars.com/kata/550f22f4d758534c1100025a
+
 
 public class DirReduction {
 
