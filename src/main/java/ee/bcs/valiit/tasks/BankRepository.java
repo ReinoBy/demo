@@ -41,9 +41,9 @@ public class BankRepository {
         jdbcTemplate.update(sql, paramMap);
     }
 
-    public void updateTransactions (String ac1, Transaction transaction, String type) {
+    public void updateTransactionsDep (String ac1, Transaction transaction, String type) {
         String sql = "INSERT INTO transactions (account_nr, amount, amount_db, tüüp, stamp) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja3, :muutuja4)";
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssms").format(new java.util.Date());
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("muutuja1", ac1);
         paramMap.put("muutuja02", transaction.getAmount());
@@ -53,6 +53,47 @@ public class BankRepository {
         jdbcTemplate.update(sql, paramMap);
     }
 
+    public void updateTransactionsWit (String ac1, Transaction transaction, String type) {
+        String sql = "INSERT INTO transactions (account_nr, amount, amount_cr, tüüp, stamp) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja3, :muutuja4)";
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssms").format(new java.util.Date());
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("muutuja1", ac1);
+        paramMap.put("muutuja02", transaction.getAmount());
+        paramMap.put("muutuja2", transaction.getAmount());
+        paramMap.put("muutuja3", type);
+        paramMap.put("muutuja4", timeStamp);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
+
+    public void updateTransactionsTransferCR (String ac1, String ac2, Transaction transaction, String type) {
+        String sql = "INSERT INTO transactions (account_nr, amount, amount_cr, account_db, tüüp, stamp) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja03, :muutuja3, :muutuja4)";
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssms").format(new java.util.Date());
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("muutuja1", ac1);
+        paramMap.put("muutuja02", transaction.getAmount());
+        paramMap.put("muutuja2", transaction.getAmount());
+        paramMap.put("muutuja03", ac2);
+        paramMap.put("muutuja3", type);
+        paramMap.put("muutuja4", timeStamp+ac1);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
+    public void updateTransactionsTransferDB (String ac1, String ac2, Transaction transaction, String type) {
+        String sql = "INSERT INTO transactions (account_nr, amount, amount_db, account_cr, tüüp, stamp) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja03, :muutuja3, :muutuja4)";
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssms").format(new java.util.Date());
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("muutuja1", ac1);
+        paramMap.put("muutuja02", transaction.getAmount());
+        paramMap.put("muutuja2", transaction.getAmount());
+        paramMap.put("muutuja03", ac2);
+        paramMap.put("muutuja3", type);
+        paramMap.put("muutuja4", timeStamp+ac1);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
+
+
     public BigDecimal valiSaldo (String ac1, Transaction transaction){
         String sql3 = "SELECT saldo FROM accounts WHERE accountnr = :muutuja7 ";
         Map<String, Object> paramMap3 = new HashMap<>();
@@ -61,13 +102,22 @@ public class BankRepository {
         return x;
     }
 
-    public void uuendaSaldo(String ac1, BigDecimal x, Transaction transaction){
+    public void uuendaSaldoDep(String ac1, BigDecimal x, Transaction transaction){
         String sql2 = "UPDATE accounts SET saldo = :muutuja5 WHERE accountnr = :muutuja6";
         Map<String, Object> paramMap2 = new HashMap<>();
         paramMap2.put("muutuja6", ac1);
         paramMap2.put("muutuja5", x.add(transaction.getAmount()));
         jdbcTemplate.update(sql2, paramMap2);
     }
+
+    public void uuendaSaldoWit(String ac1, BigDecimal x, Transaction transaction){
+        String sql2 = "UPDATE accounts SET saldo = :muutuja5 WHERE accountnr = :muutuja6";
+        Map<String, Object> paramMap2 = new HashMap<>();
+        paramMap2.put("muutuja6", ac1);
+        paramMap2.put("muutuja5", x.subtract(transaction.getAmount()));
+        jdbcTemplate.update(sql2, paramMap2);
+    }
+
 
     public Customer findCustomer(int id) {
         String sqlS1 = "SELECT * FROM customers WHERE user_id = :muutujaS1 ";

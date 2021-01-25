@@ -23,8 +23,8 @@ public class BankService {
 
     public void dep(String ac1, Transaction transaction) {
         String dep = "Deposit";
-        bankRepository.updateTransactions(ac1, transaction, dep);
-        bankRepository.uuendaSaldo(ac1, bankRepository.valiSaldo(ac1, transaction), transaction);
+        bankRepository.updateTransactionsDep(ac1, transaction, dep);
+        bankRepository.uuendaSaldoDep(ac1, bankRepository.valiSaldo(ac1, transaction), transaction);
     }
 
     public void with(String ac1, Transaction transaction) {
@@ -33,8 +33,8 @@ public class BankService {
         BigDecimal x1 = bankRepository.valiSaldo(ac1, transaction);
 
         if (transaction.getAmount().compareTo(new BigDecimal("0")) > 0 && x1.compareTo(transaction.getAmount()) > 0) {
-            bankRepository.updateTransactions(ac1, transaction, trans + "outgoing");
-            bankRepository.uuendaSaldo(ac1, x1, transaction);
+            bankRepository.updateTransactionsWit(ac1, transaction, trans + "outgoing");
+            bankRepository.uuendaSaldoWit(ac1, x1, transaction);
 
         } else {
             throw new RuntimeException("Summa oli kas negatiivne või ei ole kontol piisavalt raha");
@@ -48,10 +48,10 @@ public class BankService {
         BigDecimal x2 = bankRepository.valiSaldo(ac2, transaction);
 
         if (transaction.getAmount().compareTo(new BigDecimal("0")) > 0 && x1.compareTo(transaction.getAmount()) > 0) {
-            bankRepository.updateTransactions(ac1, transaction, trans + "outgoing");
-            bankRepository.updateTransactions(ac2, transaction, trans + "incoming");
-            bankRepository.uuendaSaldo(ac1, x1, transaction);
-            bankRepository.uuendaSaldo(ac2, x2, transaction);
+            bankRepository.updateTransactionsTransferCR(ac1, ac2, transaction, trans + "outgoing");
+            bankRepository.updateTransactionsTransferDB(ac2, ac1, transaction, trans + "incoming");
+            bankRepository.uuendaSaldoWit(ac1, x1, transaction);
+            bankRepository.uuendaSaldoDep(ac2, x2, transaction);
 
         } else {
 
