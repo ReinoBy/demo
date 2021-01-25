@@ -16,15 +16,22 @@ public class Padovan {
         String binary = Integer.toBinaryString((int)power);
         int binLength = binary.length();
 
-        BigInteger[][] mainMatrix = new BigInteger[3][3];
+        BigInteger[][] mainMatrix = {{new BigInteger("0"), new BigInteger("0"), new BigInteger("0")},
+                {new BigInteger("0"), new BigInteger("0"), new BigInteger("0")},
+                {new BigInteger("0"), new BigInteger("0"), new BigInteger("0")}};
 
         int count = 0;
 
         for (int x = binLength; x > 0; x--) {
             if (binary.substring(x - 1, x).equalsIgnoreCase("1")) {
 
-                BigInteger[][] matrix = new BigInteger[3][3];
-                BigInteger[][] c = new BigInteger[3][3];
+                BigInteger[][] matrix = {{new BigInteger("0"), new BigInteger("1"), new BigInteger("0")},
+                        {new BigInteger("0"), new BigInteger("0"), new BigInteger("1")},
+                        {new BigInteger("1"), new BigInteger("1"), new BigInteger("0")}};
+
+                BigInteger[][] c = {{new BigInteger("0"), new BigInteger("0"), new BigInteger("0")},
+                        {new BigInteger("0"), new BigInteger("0"), new BigInteger("0")},
+                        {new BigInteger("0"), new BigInteger("0"), new BigInteger("0")}};
 
                 for (int x2 = 0; x2 < binLength-x; x2++) {
                     matrixCreator(c, matrix, matrix);
