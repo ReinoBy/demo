@@ -33,7 +33,7 @@ public class BankService {
         BigDecimal x1 = bankRepository.valiSaldo(ac1, transaction);
 
         if (transaction.getAmount().compareTo(new BigDecimal("0")) > 0 && x1.compareTo(transaction.getAmount()) > 0) {
-            bankRepository.updateTransactionsWit(ac1, transaction, trans + "outgoing");
+            bankRepository.updateTransactionsWit(ac1, transaction, trans);
             bankRepository.uuendaSaldoWit(ac1, x1, transaction);
 
         } else {
