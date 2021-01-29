@@ -39,19 +39,19 @@ public class SolutionBankingController {
 
     //    deponeerimine
     @PostMapping("/bank/dep/{account}")
-    public void dep(@PathVariable("account") String ac1, @RequestBody Transaction transaction) {
+    public void dep(@PathVariable("account") int ac1, @RequestBody Transaction transaction) {
         bankService.dep(ac1, transaction);
     }
 
     //    raha välja võtmine
     @PostMapping("/bank/with/{account}")
-    public void with(@PathVariable("account") String ac1, @RequestBody Transaction transaction) {
+    public void with(@PathVariable("account") int ac1, @RequestBody Transaction transaction) {
         bankService.with(ac1, transaction);
     }
 
-    //    ülekanne õhelt kontolt teisele
+    //    ülekanne ühelt kontolt teisele
     @PostMapping("/bank/tran/{account}/{account2}/")
-    public void tran(@PathVariable("account") String ac1, @PathVariable("account2") String ac2, @RequestBody Transaction transaction) {
+    public void tran(@PathVariable("account") int ac1, @PathVariable("account2") int ac2, @RequestBody Transaction transaction) {
         bankService.transfer(ac1, ac2, transaction);
     }
 

@@ -4,16 +4,24 @@ import java.math.BigDecimal;
 
 public class Transaction {
 
-    private String accountNumber;
+    private int accountNumber;
     private BigDecimal amount;
     private BigDecimal amountCr;
     private BigDecimal amountDb;
-    private String accountCr;
-    private String accountDb;
+    private Integer accountCr;
+    private Integer accountDb;
     private String type;
     private String timeStamp;
+    private String comment;
 
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public BigDecimal getAmount() {
         return amount;
@@ -39,28 +47,28 @@ public class Transaction {
         this.amountDb = amountDb;
     }
 
-    public String getAccountCr() {
+    public Integer getAccountCr() {
         return accountCr;
     }
 
-    public void setAccountCr(String accountCr) {
+    public void setAccountCr(Integer accountCr) {
         this.accountCr = accountCr;
     }
 
-    public String getAccountDb() {
+    public Integer getAccountDb() {
         return accountDb;
     }
 
-    public void setAccountDb(String accountDb) {
+    public void setAccountDb(Integer accountDb) {
         this.accountDb = accountDb;
     }
 
 
-    public String getAccountNumber() {
+    public int getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(String accountNumber) {
+    public void setAccountNumber(int accountNumber) {
         this.accountNumber = accountNumber;
     }
 

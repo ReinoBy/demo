@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Account {
 
-    private String accountNr;
+    private int accountNr;
     private BigDecimal saldo;
     private int ownerId;
     private List<Transaction> transactions;
@@ -22,11 +22,11 @@ public class Account {
         this.ownerId = ownerId;
     }
 
-    public String getAccountNr() {
+    public int getAccountNr() {
         return accountNr;
     }
 
-    public void setAccountNr(String accountNr) {
+    public void setAccountNr(int accountNr) {
         this.accountNr = accountNr;
     }
 

@@ -5,77 +5,104 @@
     <title>Title</title>
 </head>
 <body>
-<div style="text-align: center">
-    <table style="margin-left:auto;margin-right:auto;" border="1" width="50%">
-        <tr>
-            <td>test</td>
-        </tr>
-    </table>
-    <div id="container">
-        Tühi div
-    </div>
-    <form method="post">
-    valik1: <input type="radio" name="a">
-    <input type="radio" name="a">
-    <input type="radio" name="a">
-    <input type="radio" name="b">
-    <input type="radio" name="b">
-    <input type="radio" name="b">
-    <br>
-    hidden: <input type="hidden">
-    <br>
-    text: <input id="textElement" type="text"/>
-    <br>
-    password: <input type="password"/>
-    <br>
-    textarea: <textarea name="aa"></textarea>
-    <br>
-    select:
-    <select>
-        <option>valik 1</option>
-        <option>valik 2</option>
-        <option>valik 3</option>
-    </select>
-    <br>
-    fail: <input type="file"/>
-    <br>
-    number: <input type="number"/>
-    <br>
-    email: <input type="email"/>
-    <br>
-    date: <input type="date">
-    <br>
-    datetime: <input type="datetime-local">
-    <br>
-    week: <input type="week">
-    <br>
-    time: <input type="time">
-    <br>
-    color: <input type="color">
-    <br>
-    range: <input type="range">
-    <br>
-    tel: <input type="tel">
-    <input type="submit">
-    </form>
+<p>Max or min value or abs value or is even?</p>
+a: <input id="min_a">
+b: <input id ="min_b">
+<button id = "min_button" type="button">Min</button>
+<button id = "max_button" type="button">Max</button>
+<button id = "abs_button" type="button">Abs of a</button>
+<button id = "iseven_button" type="button">Is even a?</button>
 
-    <script>
-        function calculateLoan(amount,months,interest = 10, name="John"){
-            return months;
-        }
-        console.log(calculateLoan(1000, 36, 7, "John Snow"));
-        console.log(calculateLoan(1000, 36, 7, "John", "A"));
-        console.log(calculateLoan(1000, 36));
-        console.log(calculateLoan());
-        let element = document.getElementById("textElement");
-        element.value = "midagi";
-        let myElement = document.getElementById("container");
-        let myNewElement = document.createElement("input");
-        myElement.append(myNewElement);
-        myNewElement.value="mingi tekst";
-    </script>
-</div>
+vastus: <input id = "min_answer" disabled>
+
+<p>Max or min of three values?</p>
+a: <input id ="min2_a">
+b: <input id ="min2_b">
+c: <input id ="min2_c">
+<button id = "min2_button" type="button">Min of three</button>
+<button id = "max2_button" type="button">Max of three</button>
+
+vastus: <input id = "min2_answer" disabled>
 </body>
+<script>
+    let min_a = document.getElementById("min_a");
+    let min_b = document.getElementById("min_b");
+    let min_answer = document.getElementById("min_answer");
+
+    function vajutaNuppu(){
+        if (min_a.value < min_b.value) {
+            min_answer.value = min_a.value;
+        } else {
+            min_answer.value = min_b.value;
+        }
+    }
+
+    function vajutaNuppuMax(){
+        if (min_a.value > min_b.value) {
+            min_answer.value = min_a.value;
+        } else {
+            min_answer.value = min_b.value;
+        }
+    }
+
+    function vajutaNuppuAbs(){
+        if (min_a.value>=0) {
+            min_answer.value = min_a.value;
+        } else {
+            min_answer.value = min_a.value*-1;
+        }
+    }
+
+    function vajutaNuppuIsEven(){
+        if (min_a.value%2===0) {
+            min_answer.value = true;
+        } else {
+            min_answer.value = false;
+        }
+    }
+
+
+
+    let element1 = document.getElementById("min_button");
+    element1.addEventListener("click", vajutaNuppu)
+    let element2 = document.getElementById("max_button");
+    element2.addEventListener("click", vajutaNuppuMax)
+    let element3 = document.getElementById("abs_button");
+    element3.addEventListener("click", vajutaNuppuAbs)
+    let element4 = document.getElementById("iseven_button");
+    element4.addEventListener("click", vajutaNuppuIsEven)
+
+
+    let min2_a = document.getElementById("min2_a");
+    let min2_b = document.getElementById("min2_b");
+    let min2_c = document.getElementById("min2_c");
+    let min2_answer = document.getElementById("min2_answer");
+
+    function vajutaNuppu3Min(){
+        if (min2_a.value < min2_b.value && min2_a.value < min2_c.value) {
+            min2_answer.value = min2_a.value;
+        } else if (min2_b.value < min2_a.value && min2_b.value < min2_c.value) {
+            min2_answer.value = min2_b.value;
+        } else {
+            min2_answer.value = min2_c.value;
+        }
+    }
+
+    function vajutaNuppu3Max(){
+        if (min_a.value > min_b.value) {
+            min_answer.value = min_a.value;
+        } else {
+            min_answer.value = min_b.value;
+        }
+    }
+
+    let element5 = document.getElementById("min2_button");
+    element5.addEventListener("click", vajutaNuppu3Min)
+    let element6 = document.getElementById("max2_button");
+    element6.addEventListener("click", vajutaNuppu3Max)
+
+
+</script>
 </html>
 
 

@@ -3,15 +3,6 @@ package ee.bcs.valiit.tasks;
 public class Lesson1MathUtil {
     private String test;
 
-    // TODO kirjuta ise (if/else) ära kasuta java.lang.Math
-    public Lesson1MathUtil(String test) {
-        this.test = test;
-    }
-
-    public static void main(String[] args) {
-
-        System.out.println(max(6,5,5));
-    }
 
     // TODO tagasta a ja b väikseim väärtus
     public static int min(int a, int b) {

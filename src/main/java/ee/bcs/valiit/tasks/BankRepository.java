@@ -41,8 +41,8 @@ public class BankRepository {
         jdbcTemplate.update(sql, paramMap);
     }
 
-    public void updateTransactionsDep (String ac1, Transaction transaction, String type) {
-        String sql = "INSERT INTO transactions (account_nr, amount, amount_db, tüüp, stamp) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja3, :muutuja4)";
+    public void updateTransactionsDep (int ac1, Transaction transaction, String type) {
+        String sql = "INSERT INTO transactions (accountnr, amount, amount_db, tüüp, stamp, comment) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja3, :muutuja4, :muutuja05)";
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssms").format(new java.util.Date());
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("muutuja1", ac1);
@@ -50,11 +50,12 @@ public class BankRepository {
         paramMap.put("muutuja2", transaction.getAmount());
         paramMap.put("muutuja3", type);
         paramMap.put("muutuja4", timeStamp);
+        paramMap.put("muutuja05", transaction.getComment());
         jdbcTemplate.update(sql, paramMap);
     }
 
-    public void updateTransactionsWit (String ac1, Transaction transaction, String type) {
-        String sql = "INSERT INTO transactions (account_nr, amount, amount_cr, tüüp, stamp) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja3, :muutuja4)";
+    public void updateTransactionsWit (int ac1, Transaction transaction, String type) {
+        String sql = "INSERT INTO transactions (accountnr, amount, amount_cr, tüüp, stamp, comment) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja3, :muutuja4, :muutuja05)";
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssms").format(new java.util.Date());
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("muutuja1", ac1);
@@ -62,12 +63,13 @@ public class BankRepository {
         paramMap.put("muutuja2", transaction.getAmount());
         paramMap.put("muutuja3", type);
         paramMap.put("muutuja4", timeStamp);
+        paramMap.put("muutuja05", transaction.getComment());
         jdbcTemplate.update(sql, paramMap);
     }
 
 
-    public void updateTransactionsTransferCR (String ac1, String ac2, Transaction transaction, String type) {
-        String sql = "INSERT INTO transactions (account_nr, amount, amount_cr, account_db, tüüp, stamp) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja03, :muutuja3, :muutuja4)";
+    public void updateTransactionsTransferCR (int ac1, int ac2, Transaction transaction, String type) {
+        String sql = "INSERT INTO transactions (accountnr, amount, amount_cr, account_db, tüüp, stamp, comment) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja03, :muutuja3, :muutuja4, :muutuja05)";
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssms").format(new java.util.Date());
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("muutuja1", ac1);
@@ -76,11 +78,12 @@ public class BankRepository {
         paramMap.put("muutuja03", ac2);
         paramMap.put("muutuja3", type);
         paramMap.put("muutuja4", timeStamp+ac1);
+        paramMap.put("muutuja05", transaction.getComment());
         jdbcTemplate.update(sql, paramMap);
     }
 
-    public void updateTransactionsTransferDB (String ac1, String ac2, Transaction transaction, String type) {
-        String sql = "INSERT INTO transactions (account_nr, amount, amount_db, account_cr, tüüp, stamp) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja03, :muutuja3, :muutuja4)";
+    public void updateTransactionsTransferDB (int ac1, int ac2, Transaction transaction, String type) {
+        String sql = "INSERT INTO transactions (accountnr, amount, amount_db, account_cr, tüüp, stamp, comment) VALUES (:muutuja1, :muutuja02, :muutuja2,:muutuja03, :muutuja3, :muutuja4, :muutuja05)";
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssms").format(new java.util.Date());
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("muutuja1", ac1);
@@ -89,20 +92,19 @@ public class BankRepository {
         paramMap.put("muutuja03", ac2);
         paramMap.put("muutuja3", type);
         paramMap.put("muutuja4", timeStamp+ac1);
+        paramMap.put("muutuja05", transaction.getComment());
         jdbcTemplate.update(sql, paramMap);
     }
 
 
-
-    public BigDecimal valiSaldo (String ac1, Transaction transaction){
+    public BigDecimal valiSaldo (int ac1, Transaction transaction){
         String sql3 = "SELECT saldo FROM accounts WHERE accountnr = :muutuja7 ";
         Map<String, Object> paramMap3 = new HashMap<>();
         paramMap3.put("muutuja7", ac1);
-        BigDecimal x = jdbcTemplate.queryForObject(sql3, paramMap3, BigDecimal.class);
-        return x;
+        return jdbcTemplate.queryForObject(sql3, paramMap3, BigDecimal.class);
     }
 
-    public void uuendaSaldoDep(String ac1, BigDecimal x, Transaction transaction){
+    public void uuendaSaldoDep(int ac1, BigDecimal x, Transaction transaction){
         String sql2 = "UPDATE accounts SET saldo = :muutuja5 WHERE accountnr = :muutuja6";
         Map<String, Object> paramMap2 = new HashMap<>();
         paramMap2.put("muutuja6", ac1);
@@ -110,7 +112,7 @@ public class BankRepository {
         jdbcTemplate.update(sql2, paramMap2);
     }
 
-    public void uuendaSaldoWit(String ac1, BigDecimal x, Transaction transaction){
+    public void uuendaSaldoWit(int ac1, BigDecimal x, Transaction transaction){
         String sql2 = "UPDATE accounts SET saldo = :muutuja5 WHERE accountnr = :muutuja6";
         Map<String, Object> paramMap2 = new HashMap<>();
         paramMap2.put("muutuja6", ac1);
@@ -123,14 +125,19 @@ public class BankRepository {
         String sqlS1 = "SELECT * FROM customers WHERE user_id = :muutujaS1 ";
         Map<String, Object> paramMapS1 = new HashMap<>();
         paramMapS1.put("muutujaS1", id);
-        Customer result = jdbcTemplate.queryForObject(sqlS1, paramMapS1, new BankRepository.CustomerRowMapper());
-        return result;
+        return jdbcTemplate.queryForObject(sqlS1, paramMapS1, new BankRepository.CustomerRowMapper());
+    }
+
+    public int findCustomerIsikukood(String kood) {
+        String sqlS1 = "SELECT count(*) FROM customers WHERE isikukood = :muutujaS1 ";
+        Map<String, Object> paramMapS1 = new HashMap<>();
+        paramMapS1.put("muutujaS1", kood);
+        return jdbcTemplate.queryForObject(sqlS1,paramMapS1,Integer.class);
     }
 
     public List<Customer> findListCustomers(){
         String sqlL1 = "SELECT * FROM customers";
-        List<Customer> result = jdbcTemplate.query(sqlL1, new HashMap<>(), new CustomerRowMapper());
-        return result;
+        return jdbcTemplate.query(sqlL1, new HashMap<>(), new CustomerRowMapper());
     }
 
     public List<Customer> showAllCustomers (List<Customer> customerList){
@@ -155,7 +162,7 @@ public class BankRepository {
 
     public Customer findTransactions(Customer customer) {
         for (Account account : customer.getAccounts()) {
-            String sqlS3 = "SELECT * FROM transactions WHERE account_nr = :muutujaS3 ";
+            String sqlS3 = "SELECT * FROM transactions WHERE accountnr = :muutujaS3 ";
             Map<String, Object> paramMapS3 = new HashMap<>();
             paramMapS3.put("muutujaS3", account.getAccountNr());
             List<Transaction> transactionList = jdbcTemplate.query(sqlS3, paramMapS3, new TransactionRowMapper());
@@ -187,7 +194,7 @@ public class BankRepository {
         @Override
         public Account mapRow(ResultSet resultSet, int i) throws SQLException {
             Account account = new Account();
-            account.setAccountNr(resultSet.getString("accountnr"));
+            account.setAccountNr(resultSet.getInt("accountnr"));
             account.setSaldo(resultSet.getBigDecimal("saldo"));
             account.setOwnerId(resultSet.getInt("owner_id"));
             return account;
@@ -198,14 +205,16 @@ public class BankRepository {
         @Override
         public Transaction mapRow(ResultSet resultSet, int i) throws SQLException {
             Transaction transaction = new Transaction();
-            transaction.setAccountNumber(resultSet.getString("account_nr"));
-            transaction.setAccountCr(resultSet.getString("account_cr"));
-            transaction.setAccountDb(resultSet.getString("account_db"));
+            transaction.setAccountNumber(resultSet.getInt("accountnr"));
+            transaction.setAccountCr(resultSet.getInt("account_cr"));
+            transaction.setAccountDb(resultSet.getInt("account_db"));
             transaction.setAmount(resultSet.getBigDecimal("amount"));
             transaction.setAmountCr(resultSet.getBigDecimal("amount_cr"));
             transaction.setAmountDb(resultSet.getBigDecimal("amount_db"));
             transaction.setType(resultSet.getString("tüüp"));
             transaction.setTimeStamp(resultSet.getString("stamp"));
+            transaction.setComment(resultSet.getString("comment"));
+
             return transaction;
         }
     }

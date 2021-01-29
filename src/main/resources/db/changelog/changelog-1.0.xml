@@ -4,22 +4,103 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="1" author="Siim">
-        <createTable tableName="author">
-            <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true"/>
+    <changeSet id="27012021a" author="Reino">
+        <createTable tableName="customers">
+            <column name="user_id" type="int" autoIncrement="true" startWith="1000000">
+                <constraints primaryKey="true" unique="true"/>
             </column>
-            <column name="name" type="text"/>
+            <column name="first_name" type="text"/>
+            <column name="last_name" type="text"/>
+            <column name="isikukood" type="text">
+                <constraints unique="true"/>
+            </column>
+            <column name="aadress" type="text"/>
+            <column name="telefon" type="text"/>
+            <column name="email" type="text"/>
         </createTable>
 
-        <createTable tableName="book">
-            <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true"/>
+        <createTable tableName="accounts">
+            <column name="accountnr" type="int" autoIncrement="true" startWith="771000">
+                <constraints primaryKey="true" unique="true"/>
             </column>
-            <column name="name" type="text"/>
-            <column name="author_id" type="int">
-                <constraints foreignKeyName="fk_book_author" references="author(id)"/>
+            <column name="saldo" type="numeric"/>
+            <column name="owner_id" type="int">
+                <constraints foreignKeyName="fk_customers_accounts" references="customers(user_id)"/>
             </column>
         </createTable>
+
+        <createTable tableName="transactions">
+            <column name="accountnr" type="int">
+                <constraints foreignKeyName="fk_accounts_transactions" references="accounts(accountnr)"/>
+            </column>
+            <column name="tüüp" type="text"/>
+            <column name="stamp" type="text">
+                <constraints unique="true"/>
+            </column>
+            <column name="amount_cr" type="numeric"/>
+            <column name="amount_db" type="numeric"/>
+            <column name="account_cr" type="int"/>
+            <column name="account_db" type="int"/>
+            <column name="amount" type="numeric"/>
+            <column name="comment" type="text"/>
+            <column name="transaction_id" type="bigint" autoIncrement="true" startWith="1000000000">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+
+
+        </createTable>
+
+
     </changeSet>
+
+    <changeSet id="27012021b" author="Reino">
+        <createTable tableName="customers_hib">
+            <column name="user_id" type="int" autoIncrement="true" startWith="1000000">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+            <column name="first_name" type="text"/>
+            <column name="last_name" type="text"/>
+            <column name="isikukood" type="text">
+                <constraints unique="true"/>
+            </column>
+            <column name="aadress" type="text"/>
+            <column name="telefon" type="text"/>
+            <column name="email" type="text"/>
+        </createTable>
+
+        <createTable tableName="accounts_hib">
+            <column name="accountnr" type="int" autoIncrement="true" startWith="771000">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+            <column name="saldo" type="numeric"/>
+            <column name="owner_id" type="int">
+                <constraints foreignKeyName="fk_customers_hib_accounts_hib" references="customers_hib(user_id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="transactions_hib">
+            <column name="accountnr" type="int">
+                <constraints foreignKeyName="fk_accounts_hib_transactions_hib" references="accounts_hib(accountnr)"/>
+            </column>
+            <column name="tüüp" type="text"/>
+            <column name="stamp" type="text">
+                <constraints unique="true"/>
+            </column>
+            <column name="amount_cr" type="numeric"/>
+            <column name="amount_db" type="numeric"/>
+            <column name="account_cr" type="int"/>
+            <column name="account_db" type="int"/>
+            <column name="amount" type="numeric"/>
+            <column name="comment" type="text"/>
+            <column name="transaction_id" type="bigint" autoIncrement="true" startWith="1000000000">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+
+
+        </createTable>
+
+
+    </changeSet>
+
+
 </databaseChangeLog>
