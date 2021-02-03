@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kontode väljavõte - KoduPank</title>
+</head>
+<body>
+<p>Sisesta kontonumber</p>
+Kontomuber: <input id="account_id"><br>
+<br>
+<button id="get_trans" type="button">Too konto väljavõte</button>
+<br>
+<br>
+<table id="Kanded">
+    <tr>
+        <th>Kandenumber</th>
+        <th>Kuupäev</th>
+        <th>Summa</th>
+        <th>Kommentaar</th>
+        <th>Seotud konto</th>
+
+
+    </tr>
+</table>
+
+
+<br>
+
+</body>
+<script>
+    function getTrans() {
+        let geturl = "/hibernate/bank/account/" + document.getElementById("account_id").value;
+
+        fetch(geturl,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(result => result.json())
+            .then(function (result) {
+                let tableElement = document.getElementById("Kanded");
+                let newRowElement = document.createElement("tr");
+                    tableElement.appendChild(newRowElement);
+                // tableElement.innerText = "";
+                for (let element of result) {
+                    let newRowElement = document.createElement("tr");
+                    tableElement.appendChild(newRowElement);
+                    //    transactionID
+                    let newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.transactionID;
+                    newRowElement.appendChild(newCellElement);
+                    //    Kuupäev
+                    newCellElement = document.createElement("td");
+                    let stamp = element.timeStamp.toString().substr(0,8);
+                    newCellElement.innerText = stamp;
+                    newRowElement.appendChild(newCellElement);
+                    //    summa
+                    newCellElement = document.createElement("td");
+                    if(element.type==="Deposit" || element.type==="Transfer incoming"){
+                        newCellElement.innerText = element.amount;
+                    } else {
+                        newCellElement.innerText = element.amount*(-1);
+                    }
+                    newRowElement.appendChild(newCellElement);
+                    //    kommentaar
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.comment;
+                    newRowElement.appendChild(newCellElement);
+                    //    seotud konto
+                    newCellElement = document.createElement("td");
+                    if(element.type==="Deposit" || element.type==="Transfer incoming"){
+                        newCellElement.innerText = element.accountCr;
+                    } else {
+                        newCellElement.innerText = element.accountDb;
+                    }
+                    newRowElement.appendChild(newCellElement);
+
+                }
+
+            });
+
+    }
+
+    let element = document.getElementById("get_trans");
+    element.addEventListener("click", getTrans)
+
+
+
+</script>
+</html>
+
+
+
+
+
+

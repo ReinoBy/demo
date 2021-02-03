@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Raha välja - KoduPank</title>
+</head>
+<body>
+
+<p>Sisesta kontonumber ja summa</p>
+Kontonumber: <input id="account_id"><br>
+Summa: <input id="amount"><br>
+
+<button id="withdraw" type="button">Võta raha välja</button>
+
+<div id="vastus">
+</div>
+
+</body>
+<script>
+    function withdraw() {
+        let newWith = {
+            accountnr: document.getElementById("account_id").value,
+            amount: document.getElementById("amount").value,
+            comment: "Raha väljavõtt"
+        }
+
+        let konto = document.getElementById("account_id").value;
+
+        let posturl = "/hibernate/bank/with/" + konto;
+
+        fetch(posturl,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newWith)
+            })
+            .then(result => console.log(result))
+            .then(function () {
+                // siia tuleb koht, kuhu vaja kirjutada, mis kliendile vaja näidata
+                document.getElementById("vastus").innerHTML =
+                    '<div id = "vastus2">'
+                    + "Raha väljavõtt õnnestus" +
+                    '</div>'
+            });
+    }
+
+    let element = document.getElementById("withdraw");
+    element.addEventListener("click", withdraw)
+
+</script>
+</html>
+
+
+
+
+
+

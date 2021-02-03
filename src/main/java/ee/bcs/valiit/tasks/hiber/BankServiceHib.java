@@ -1,13 +1,16 @@
 package ee.bcs.valiit.tasks.hiber;
 
 import ee.bcs.valiit.tasks.*;
+import liquibase.pro.packaged.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BankServiceHib {
@@ -18,16 +21,30 @@ public class BankServiceHib {
     private AccountRepositoryHib accountRepositoryHib;
     @Autowired
     private TransactionRepositoryHib transactionRepositoryHib;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 
-    //    siia defineerime kõik panga meetodid
     @Transactional
     public void createCustomer(@RequestBody Customer customer) {
         isValidIsikukood(customer.getIsikukood());
         CustomersHib customersHib = new CustomersHib(customer);
         customerRepositoryHib.save(customersHib);
     }
+
+    @Transactional
+    public void updateCustomer(@RequestBody Customer customer) {
+        int id = customer.getUserID();
+        CustomersHib customersHib = customerRepositoryHib.getOne(id);
+        customersHib.setFirstName(customer.getFirstName());
+        customersHib.setLastName(customer.getLastName());
+        customersHib.setAadress(customer.getAadress());
+        customersHib.setTelefon(customer.getTelefon());
+        customersHib.setEmail(customer.getEmail());
+        customerRepositoryHib.save(customersHib);
+    }
+
 
     @Transactional
     public void createAccount(@RequestBody Customer customer) {
@@ -38,11 +55,11 @@ public class BankServiceHib {
     }
 
     @Transactional
-    public void dep(int ac1, Transaction transaction) {
+    public void dep(int ac1, int ac2, Transaction transaction, String tuup) {
         isValidAmount(transaction.getAmount());
         isValidAccountNr(ac1);
         AccountsHib accountsHib = accountRepositoryHib.getOne(ac1);
-        TransactionsHib transactionsHib = new TransactionsHib(accountsHib, transaction, "Deposit");
+        TransactionsHib transactionsHib = new TransactionsHib(accountsHib, transaction, tuup, ac2);
         transactionRepositoryHib.save(transactionsHib);
         BigDecimal saldo = accountsHib.getSaldo();
         saldo = saldo.add(transaction.getAmount());
@@ -52,12 +69,12 @@ public class BankServiceHib {
     }
 
     @Transactional
-    public void with(int ac1, Transaction transaction) {
+    public void with(int ac1, int ac2, Transaction transaction, String tuup) {
         isValidAmount(transaction.getAmount());
         isValidAccountNr(ac1);
-        isEnoughMoney(transaction.getAmount(),ac1);
+        isEnoughMoney(transaction.getAmount(), ac1);
         AccountsHib accountsHib = accountRepositoryHib.getOne(ac1);
-        TransactionsHib transactionsHib = new TransactionsHib(accountsHib, transaction, "Withdraw");
+        TransactionsHib transactionsHib = new TransactionsHib(accountsHib, transaction, tuup, ac2);
         transactionRepositoryHib.save(transactionsHib);
         BigDecimal saldo = accountsHib.getSaldo();
         saldo = saldo.subtract(transaction.getAmount());
@@ -66,43 +83,74 @@ public class BankServiceHib {
 
     }
 
-//
-//    @Transactional
-//    public void with(int ac1, Transaction transaction) {
-//        BigDecimal x1;
-//        isValidAmount(transaction.getAmount());
-//        isValidAccountNr(ac1, transaction);
-//        x1 = bankRepository.valiSaldo(ac1, transaction);
-//        isEnoughMoney(x1, transaction);
-//        bankRepository.updateTransactionsWit(ac1, transaction, "Withdraw");
-//        bankRepository.uuendaSaldoWit(ac1, x1, transaction);
-//    }
-//
-//    @Transactional
-//    public void transfer(int ac1, int ac2, Transaction transaction) {
-//        isValidAmount(transaction.getAmount());
-//        isValidAccountNr(ac1, transaction);
-//        isValidAccountNr(ac2, transaction);
-//        BigDecimal x1 = bankRepository.valiSaldo(ac1, transaction);
-//        BigDecimal x2 = bankRepository.valiSaldo(ac2, transaction);
-//        isEnoughMoney(x1, transaction);
-//        bankRepository.updateTransactionsTransferCR(ac1, ac2, transaction, "Transfer outgoing");
-//        bankRepository.updateTransactionsTransferDB(ac2, ac1, transaction, "Transfer incoming");
-//        bankRepository.uuendaSaldoWit(ac1, x1, transaction);
-//        bankRepository.uuendaSaldoDep(ac2, x2, transaction);
-//    }
-//
-//    @Transactional
-//    public Customer showCustomer(int id) {
-//        isValidCustomer(id);
-//        return bankRepository.findTransactions(bankRepository.findAccounts(bankRepository.findCustomer(id)));
-//    }
-//
-//    @Transactional
-//    public List<Customer> showAllCustomers() {
-//        return bankRepository.showAllCustomers(bankRepository.findListCustomers());
-//    }
 
+    @Transactional
+    public Customer findCustomer(int ac1) {
+        isValidCustomer(ac1);
+        CustomersHib customersHib = customerRepositoryHib.getOne(ac1);
+        Customer customer = new Customer(customersHib);
+        List<Account> accounts = new ArrayList<>();
+        for (AccountsHib accountsHib : customersHib.getAccountsHibs()) {
+            Account account = new Account(accountsHib);
+            List<Transaction> trans = new ArrayList<>();
+            for (TransactionsHib transactionsHib : accountsHib.getTransactionsHibs()) {
+                trans.add(new Transaction(transactionsHib));
+            }
+            account.setTransactions(trans);
+            accounts.add(account);
+        }
+
+        customer.setAccounts(accounts);
+        return customer;
+    }
+
+    @Transactional
+    public List<Account> findCustomerAccounts(int ac1) {
+        isValidCustomer(ac1);
+        CustomersHib customersHib = customerRepositoryHib.getOne(ac1);
+        List<Account> accounts = new ArrayList<>();
+        for (AccountsHib accountsHib : customersHib.getAccountsHibs()) {
+            Account account = new Account(accountsHib);
+            accounts.add(account);
+        }
+
+        return accounts;
+    }
+
+    @Transactional
+    public List<Transaction> findAccount(int ac1) {
+        isValidAccountNr(ac1);
+        AccountsHib accountsHib = accountRepositoryHib.getOne(ac1);
+        List<Transaction> trans = new ArrayList<>();
+        for (TransactionsHib transactionsHib : accountsHib.getTransactionsHibs()) {
+            trans.add(new Transaction(transactionsHib));
+        }
+        return trans;
+}
+
+    @Transactional
+    public Transaction findTransaction(int ac1) {
+        isValidTransaction(ac1);
+        TransactionsHib transactionsHib = transactionRepositoryHib.getOne(ac1);
+        Transaction transaction = new Transaction(transactionsHib);
+
+        return transaction;
+    }
+
+    @Transactional
+    public List<Customer> getCustomerList(){
+        List<CustomersHib> customersHibList = customerRepositoryHib.findAll();
+        List<Customer> customerList = new ArrayList<>();
+        for(CustomersHib customersHib:customersHibList){
+            Customer customer = new Customer(customersHib);
+            customerList.add(customer);
+        }
+        return customerList;
+    }
+
+
+
+    //    Validation
     @Transactional
     public void isValidAmount(BigDecimal num) {
         if (num.compareTo(new BigDecimal("0")) <= 0) {
@@ -112,12 +160,20 @@ public class BankServiceHib {
 
     @Transactional
     public void isValidAccountNr(int num) {
-        if (accountRepositoryHib.findById(num).isEmpty()){
+        if (!accountRepositoryHib.existsById(num)) {
             throw new BankException("Sellist kontot ei ole olemas");
         }
 
     }
 
+    @Transactional
+    public void isValidTransaction(int ac1) {
+        if (!transactionRepositoryHib.existsById(ac1)) {
+            throw new BankException("Sellist kontot ei ole olemas");
+        }
+
+
+    }
     @Transactional
     public void isEnoughMoney(BigDecimal num, int ac1) {
         if (accountRepositoryHib.getOne(ac1).getSaldo().compareTo(num) < 0) {
@@ -128,7 +184,7 @@ public class BankServiceHib {
 
     @Transactional
     public void isValidCustomer(int id) {
-        if (customerRepositoryHib.findById(id).isEmpty()){
+        if (!customerRepositoryHib.existsById(id)) {
             throw new BankException("Sellist klienti ei ole olemas");
         }
 
@@ -144,10 +200,11 @@ public class BankServiceHib {
             throw new BankException("Isikukood peab algama numbritega 3-6");
         }
 
-        if (customerRepositoryHib.countCustomersHibByIsikukoodContains(isikukood)==1) {
+        if (customerRepositoryHib.countCustomersHibByIsikukoodContains(isikukood) == 1) {
             throw new BankException("Sellise isikukoodiga inimene on juba andmebaasis olemas");
 
         }
     }
+
 
 }

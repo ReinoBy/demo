@@ -20,6 +20,7 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleError (Exception e){
+        e.printStackTrace();
         ErrorResponse error = new ErrorResponse();
         error.setMessage(e.getMessage());
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR );

@@ -1,5 +1,9 @@
 package ee.bcs.valiit.tasks;
 
+import ee.bcs.valiit.tasks.hiber.AccountsHib;
+import ee.bcs.valiit.tasks.hiber.CustomersHib;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
@@ -14,14 +18,36 @@ public class Customer {
     private List<Account> accounts;
 
 
-    public List<Account> getAccounts() {
+    public Customer(CustomersHib customersHib) {
+        this.setUserID(customersHib.getUserID());
+        this.setFirstName(customersHib.getFirstName());
+        this.setLastName(customersHib.getLastName());
+        this.setIsikukood(customersHib.getIsikukood());
+        this.setAadress(customersHib.getAadress());
+        this.setTelefon(customersHib.getTelefon());
+        this.setEmail(customersHib.getEmail());
+        List<Account> acc = new ArrayList<>();
+        for(AccountsHib accountsHib: customersHib.getAccountsHibs()){
+            Account account = new Account(accountsHib);
+            acc.add(account);
+          }
+        this.setAccounts(acc);
 
+    }
+
+    public Customer() {
+
+    }
+
+
+    public List<Account> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(List<Account> accounts) {
+    public void setAccounts(List<Account> accounts)  {
         this.accounts = accounts;
     }
+
 
     public int getUserID() {
         return userID;

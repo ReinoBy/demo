@@ -1,8 +1,6 @@
 package ee.bcs.valiit.tasks.hiber;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import ee.bcs.valiit.tasks.Transaction;
-import ee.bcs.valiit.tasks.hiber.AccountsHib;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -27,22 +25,46 @@ public class TransactionsHib {
     private String comment;
     private String stamp;
 
-    public TransactionsHib(AccountsHib accountsHib, Transaction transaction, String tüüp) {
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssms").format(new java.util.Date());
+    public Integer getTransaction_id() {
+        return transaction_id;
+    }
+
+    public void setTransaction_id(Integer transaction_id) {
+        this.transaction_id = transaction_id;
+    }
+
+    public TransactionsHib(AccountsHib accountsHib, Transaction transaction, String tuup, int ac2) {
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssmsss").format(new java.util.Date());
         this.setAccountsHib(accountsHib);
         this.setAmount(transaction.getAmount());
-        if (tüüp == "Deposit"|| tüüp == "Transfer incoming"){
-            this.setAccountDb(accountsHib.getAccountNr());
+        if (tuup == "Transfer incoming"){
+            this.setAccountCr(ac2);
             this.setAmountDb(transaction.getAmount());
+            this.setTimeStamp(timeStamp+"d");
+        }
+        if (tuup == "Deposit"){
+            this.setAccountDb(ac2);
+            this.setAmountDb(transaction.getAmount());
+            this.setTimeStamp(timeStamp+"d");
+        }
 
-        }
-        if (tüüp == "Withdraw" || tüüp == "Transfer outgoing"){
-            this.setAccountCr(accountsHib.getAccountNr());
+        if (tuup == "Transfer outgoing"){
+            this.setAccountDb(ac2);
             this.setAmountCr(transaction.getAmount());
+            this.setTimeStamp(timeStamp+"c");
         }
-        this.setTimeStamp(timeStamp);
-        this.setType(tüüp);
+        if (tuup == "Withdraw" ){
+            this.setAccountCr(ac2);
+            this.setAmountCr(transaction.getAmount());
+            this.setTimeStamp(timeStamp+"c");
+        }
+
+        this.setType(tuup);
         this.setComment(transaction.getComment());
+    }
+
+    public TransactionsHib() {
+
     }
 
 

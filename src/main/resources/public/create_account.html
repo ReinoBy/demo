@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Konto loomine - KoduPank</title>
+</head>
+<body>
+
+<p>Sisesta konto loomiseks kliendinumber</p>
+Kliendinumber: <input id="user_id"><br>
+<button id="create_account" type="button">Loo kliendile konto</button>
+
+<div id="vastus">
+</div>
+
+</body>
+<script>
+    function createAccount() {
+        let newAccount = {
+            userID: document.getElementById("user_id").value
+        }
+
+
+        let posturl = "/hibernate/bank/account/";
+
+        fetch(posturl,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newAccount)
+            })
+            .then(result => result.json())
+            .then(function (result) {
+                // siia tuleb koht, kuhu vaja kirjutada, mis kliendile vaja näidata
+                document.getElementById("vastus").innerHTML =
+                    '<div id = "vastus2">'
+                    + result.message +
+                    '</div>'
+            });
+    }
+
+    let element = document.getElementById("create_account");
+    element.addEventListener("click", createAccount)
+
+</script>
+</html>
+
+
+
+
+
+

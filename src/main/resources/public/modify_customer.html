@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kliendi muutmine - KoduPank</title>
+</head>
+<body>
+<p>Sisesta kliendinumber</p>
+Kliendinumber: <input id="user_id"><br>
+<button id="get_customer" type="button">Too kliendi andmed</button>
+<br>
+<div id="vastus0">
+</div>
+
+<br>
+
+<p>Sisesta uued kliendi andmed</p>
+Eesnimi: <input id="f_name" value="tühi"><br>
+Perekonnanimi: <input id="l_name"><br>
+Isikukood: <input id="i_kood" disabled><br>
+Aadress: <input id="address"><br>
+Telefon: <input id="phone"><br>
+email: <input id="email"><br>
+
+<button id="save_customer" type="button">Salvesta kliendi andmed</button>
+<br>
+<div id="vastus">
+</div>
+
+</body>
+<script>
+    function getCustomer() {
+        let oldCustomer = {
+            user_id: document.getElementById("user_id").value
+        }
+        let posturl = "/hibernate/bank/customer/" + document.getElementById("user_id").value;
+
+        fetch(posturl,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(result => result.json())
+            .then(function (result) {
+                // siia tuleb koht, kuhu vaja kirjutada, mis kliendile vaja näidata
+                document.getElementById("vastus0").innerHTML =
+                    '<div id = "vastus02">'
+                    + "Leidsin kliendi" +
+                    '</div>'
+                document.getElementById("f_name").value = result.firstName;
+                document.getElementById("l_name").value = result.lastName;
+                document.getElementById("i_kood").value = result.isikukood;
+                document.getElementById("address").value = result.aadress;
+                document.getElementById("phone").value = result.telefon;
+                document.getElementById("email").value = result.email;
+
+            });
+
+    }
+
+    let element = document.getElementById("get_customer");
+    element.addEventListener("click", getCustomer)
+
+
+    function modifyCustomer() {
+        let updateCustomer = {
+            userID: document.getElementById("user_id").value,
+            firstName: document.getElementById("f_name").value,
+            lastName: document.getElementById("l_name").value,
+            isikukood: document.getElementById("i_kood").value,
+            aadress: document.getElementById("address").value,
+            telefon: document.getElementById("phone").value,
+            email: document.getElementById("email").value
+        }
+
+        let posturl = "/hibernate/bank/customer/update/";
+
+        fetch(posturl,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateCustomer)
+            })
+            .then(result => result.json())
+            .then(function (result) {
+                // siia tuleb koht, kuhu vaja kirjutada, mis kliendile vaja näidata
+                document.getElementById("vastus").innerHTML =
+                    '<div id = "vastus2">'
+                    + result.message +
+                    '</div>'
+            });
+
+    }
+
+    let element2 = document.getElementById("save_customer");
+    element2.addEventListener("click", modifyCustomer)
+
+</script>
+</html>
+
+
+
+
+
+

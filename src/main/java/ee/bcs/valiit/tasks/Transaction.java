@@ -1,19 +1,47 @@
 package ee.bcs.valiit.tasks;
 
+import ee.bcs.valiit.tasks.hiber.TransactionsHib;
+
 import java.math.BigDecimal;
 
 public class Transaction {
 
+    private int transactionID;
     private int accountNumber;
     private BigDecimal amount;
+    private String type;
+    private String timeStamp;
+    private String comment;
     private BigDecimal amountCr;
     private BigDecimal amountDb;
     private Integer accountCr;
     private Integer accountDb;
-    private String type;
-    private String timeStamp;
-    private String comment;
 
+
+
+    public Transaction(TransactionsHib transactionsHib) {
+        this.setTransactionID(transactionsHib.getTransaction_id());
+        this.setAmountDb(transactionsHib.getAmountDb());
+        this.setAmountCr(transactionsHib.getAmountCr());
+        this.setAccountCr(transactionsHib.getAccountCr());
+        this.setAccountDb(transactionsHib.getAccountDb());
+        this.setAccountNumber(transactionsHib.getAccountsHib().getAccountNr());
+        this.setAmount(transactionsHib.getAmount());
+        this.setType(transactionsHib.getType());
+        this.setComment(transactionsHib.getComment());
+        this.setTimeStamp(transactionsHib.getTimeStamp());
+    }
+
+    public Transaction() {
+
+    }
+    public int getTransactionID() {
+        return transactionID;
+    }
+
+    public void setTransactionID(int transactionID) {
+        this.transactionID = transactionID;
+    }
 
     public String getComment() {
         return comment;

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kasutaja loomine </title>
+</head>
+<body>
+
+<p>Sisesta kasutaja andmed</p>
+Kasutajanimi: <input id="username"><br>
+Salasõna: <input id="password"><br>
+<button id="save_user" type="button">Loo uus kasutaja</button>
+
+<div id="vastus">
+</div>
+
+</body>
+<script>
+    function createUser() {
+        let newUser = {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+        }
+
+        let posturl = "/user";
+
+        fetch(posturl,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newUser)
+            })
+            .then(result => result.json())
+            .then(function (result) {
+                // siia tuleb koht, kuhu vaja kirjutada, mis kliendile vaja näidata
+                document.getElementById("vastus").innerHTML =
+                    '<div id = "vastus2">'
+                    + result.message +
+                    '</div>'
+            });
+
+    }
+
+    let element = document.getElementById("save_user");
+    element.addEventListener("click", createUser)
+
+</script>
+</html>
+
+
+
+
+
+

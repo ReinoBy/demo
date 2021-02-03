@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Klientide vaatamine - KoduPank</title>
+</head>
+<body>
+<button id="get_customer" type="button">Too klientide andmed</button>
+<br>
+<br>
+<table id="Klient">
+    <tr>
+        <th>Kliendinumber</th>
+        <th>Eesnimi</th>
+        <th>Perekonnanimi</th>
+        <th>Isikukood</th>
+        <th>Aadress</th>
+        <th>Telefon</th>
+        <th>Email</th>
+    </tr>
+</table>
+
+
+<br>
+
+</body>
+<script>
+    function getCustomer() {
+
+        let posturl = "/hibernate/bank/customer/";
+
+        fetch(posturl,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(result => result.json())
+            .then(function (result) {
+                let tableElement = document.getElementById("Klient");
+                // tableElement.innerText = "";
+                for (let element of result) {
+                    let newRowElement = document.createElement("tr");
+                    tableElement.appendChild(newRowElement);
+                    //    id
+                    let newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.userID;
+                    newRowElement.appendChild(newCellElement);
+                    //    FName
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.firstName;
+                    newRowElement.appendChild(newCellElement);
+                    //    LName
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.lastName;
+                    newRowElement.appendChild(newCellElement);
+                    //    Isikukood
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.isikukood;
+                    newRowElement.appendChild(newCellElement);
+                    //    Aadress
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.aadress;
+                    newRowElement.appendChild(newCellElement);
+                    //    Telefon
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.telefon;
+                    newRowElement.appendChild(newCellElement);
+                    //    email
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.email;
+                    newRowElement.appendChild(newCellElement);
+
+                }
+
+            });
+
+    }
+
+    let element = document.getElementById("get_customer");
+    element.addEventListener("click", getCustomer)
+
+
+</script>
+</html>
+
+
+
+
+
+

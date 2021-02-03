@@ -1,5 +1,7 @@
 package ee.bcs.valiit.tasks;
 
+import ee.bcs.valiit.tasks.hiber.AccountsHib;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,10 +11,19 @@ import java.util.Map;
 public class Account {
 
     private int accountNr;
-    private BigDecimal saldo;
     private int ownerId;
+    private BigDecimal saldo;
     private List<Transaction> transactions;
 
+
+    public Account(AccountsHib accountsHib) {
+        this.setAccountNr(accountsHib.getAccountNr());
+        this.setSaldo(accountsHib.getSaldo());
+        this.setOwnerId(accountsHib.getCustomersHib().getUserID());
+
+    }
+    public Account() {
+    }
 
     public int getOwnerId() {
         return ownerId;

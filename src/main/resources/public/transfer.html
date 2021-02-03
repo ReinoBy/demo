@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ülekanne - KoduPank</title>
+</head>
+<body>
+
+<p>Sisesta kontode numbrid, summa ja selgitus</p>
+Maksja kontonumber: <input id="account_id1"><br>
+Saaja kontonumber: <input id="account_id2"><br>
+Summa: <input id="amount"><br>
+Selgitus: <input id="comment"><br>
+
+<button id="transfer" type="button">Tee ülekanne</button>
+
+<div id="vastus">
+</div>
+
+</body>
+<script>
+    function transfer() {
+        let newTrans = {
+            amount: document.getElementById("amount").value,
+            comment: document.getElementById("comment").value
+        }
+        let konto1 = document.getElementById("account_id1").value;
+        let konto2 = document.getElementById("account_id2").value;
+
+        let posturl = "/hibernate/bank/tran/" + konto1 +"/"+ konto2 +"/";
+
+        fetch(posturl,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newTrans)
+            })
+            .then(result => result.json())
+            .then(function (result) {
+                // siia tuleb koht, kuhu vaja kirjutada, mis kliendile vaja näidata
+                document.getElementById("vastus").innerHTML =
+                    '<div id = "vastus2">'
+                    + result.message +
+                    '</div>'
+            });
+    }
+
+    let element = document.getElementById("transfer");
+    element.addEventListener("click", transfer)
+
+</script>
+</html>
+
+
+
+
+
+

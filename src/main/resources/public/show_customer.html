@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kliendi vaatamine - KoduPank</title>
+</head>
+<body>
+<p>Sisesta kliendinumber</p>
+Kliendinumber: <input id="user_id"><br>
+<button id="get_customer" type="button">Too kliendi isikuandmed</button>
+<br>
+<br>
+<table id="Klient">
+    <tr>
+        <th>Kliendinumber</th>
+        <th>Eesnimi</th>
+        <th>Perekonnanimi</th>
+        <th>Isikukood</th>
+        <th>Aadress</th>
+        <th>Telefon</th>
+        <th>Email</th>
+    </tr>
+</table>
+
+
+<br>
+
+</body>
+<script>
+    function getCustomer() {
+        let customer = {
+            user_id: document.getElementById("user_id").value
+        }
+        let posturl = "/hibernate/bank/customer/" + document.getElementById("user_id").value;
+
+        fetch(posturl,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(result => result.json())
+            .then(function (result) {
+                let tableElement = document.getElementById("Klient");
+                let newRowElement = document.createElement("tr");
+                    tableElement.appendChild(newRowElement);
+                //    id
+                    let newCellElement = document.createElement("td");
+                    newCellElement.innerText = result.userID;
+                    newRowElement.appendChild(newCellElement);
+                    //    FName
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = result.firstName;
+                    newRowElement.appendChild(newCellElement);
+                    //    LName
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = result.lastName;
+                    newRowElement.appendChild(newCellElement);
+                    //    Isikukood
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = result.isikukood;
+                    newRowElement.appendChild(newCellElement);
+                    //    Aadress
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = result.aadress;
+                    newRowElement.appendChild(newCellElement);
+                    //    Telefon
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = result.telefon;
+                    newRowElement.appendChild(newCellElement);
+                    //    email
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = result.email;
+                    newRowElement.appendChild(newCellElement);
+
+
+            });
+
+    }
+
+    let element = document.getElementById("get_customer");
+    element.addEventListener("click", getCustomer)
+
+
+
+</script>
+</html>
+
+
+
+
+
+

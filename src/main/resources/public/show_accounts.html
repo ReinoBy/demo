@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kliendi kontode vaatamine - KoduPank</title>
+</head>
+<body>
+<p>Sisesta kliendinumber</p>
+Kliendinumber: <input id="user_id"><br>
+<br>
+<button id="get_accounts" type="button">Too kliendi kontod</button>
+<br>
+<br>
+<table id="Kontod">
+    <tr>
+        <th>Kontonumber</th>
+        <th>Saldo</th>
+    </tr>
+</table>
+
+
+<br>
+
+</body>
+<script>
+    function getAccounts() {
+        let geturl = "/hibernate/bank/customer/accounts/" + document.getElementById("user_id").value;
+
+        fetch(geturl,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(result => result.json())
+            .then(function (result) {
+                let tableElement = document.getElementById("Kontod");
+                let newRowElement = document.createElement("tr");
+                    tableElement.appendChild(newRowElement);
+                // tableElement.innerText = "";
+                for (let element of result) {
+                    let newRowElement = document.createElement("tr");
+                    tableElement.appendChild(newRowElement);
+                    //    accountnr
+                    let newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.accountNr;
+                    newRowElement.appendChild(newCellElement);
+                    //    saldo
+                    newCellElement = document.createElement("td");
+                    newCellElement.innerText = element.saldo;
+                    newRowElement.appendChild(newCellElement);
+                }
+
+            });
+
+    }
+
+    let element = document.getElementById("get_accounts");
+    element.addEventListener("click", getAccounts)
+
+
+
+</script>
+</html>
+
+
+
+
+
+
